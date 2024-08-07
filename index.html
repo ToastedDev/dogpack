@@ -9,13 +9,14 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/odometer.js/0.4.8/themes/odometer-theme-default.min.css"
     />
     <style>
-      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap");
+      @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap");
 
       :root {
         --primary-color: #ffffff;
         --secondary-color: #bbbbbb;
         --background-color: rgba(18, 18, 18, 0.8);
         --overlay-color: rgba(0, 0, 0, 0.7);
+        --highlight-color: #ffffff;
       }
 
       body,
@@ -23,7 +24,7 @@
         margin: 0;
         padding: 0;
         height: 100%;
-        font-family: "Inter", sans-serif;
+        font-family: "Poppins", sans-serif;
       }
 
       body {
@@ -63,10 +64,11 @@
         font-size: clamp(1.5rem, 4vw, 2.5rem);
         margin-bottom: 20px;
         line-height: 1.2;
+        font-weight: 800;
       }
 
       h1 a {
-        color: var(--primary-color);
+        color: var(--highlight-color);
         text-decoration: none;
         transition: text-decoration 0.3s ease;
       }
@@ -117,6 +119,13 @@
         transition: transform 0.9s;
       }
 
+      .local-time {
+        margin-top: 1rem;
+        font-size: clamp(0.8rem, 2vw, 1.2rem);
+        font-weight: 300;
+        color: var(--highlight-color);
+      }
+
       @media (max-width: 480px) {
         .countdown {
           gap: 1rem;
@@ -132,7 +141,7 @@
           href="https://www.youtube.com/@DogPack404"
           target="_blank"
           rel="noopener noreferrer"
-          >DogPack404 MrBeast Part 2<br />Video Release Countdown</a
+          >DogPack404 Part 2<br />Video Release Countdown</a
         >
       </h1>
       <div class="countdown" id="countdown">
@@ -153,6 +162,7 @@
           <span class="countdown-label">Seconds</span>
         </div>
       </div>
+      <div class="local-time" id="local-time"></div>
     </main>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/odometer.js/0.4.8/odometer.min.js"></script>
@@ -206,8 +216,19 @@
           secondsOdometer.update(seconds);
         }
 
+        function updateLocalTime() {
+          const targetDateObj = new Date(targetDate);
+          targetDateObj.setSeconds(0);
+          const localTime = targetDateObj.toLocaleString();
+          document.getElementById(
+            "local-time"
+          ).innerText = `Video release at ${localTime}`;
+        }
+
         updateOdometers();
+        updateLocalTime();
         setInterval(updateOdometers, 1000);
+        setInterval(updateLocalTime);
       });
     </script>
   </body>
