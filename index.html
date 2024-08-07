@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DogPack404 MrBeast Part 2 Countdown</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/odometer.js/0.4.8/themes/odometer-theme-default.min.css"
+    />
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap");
+
+      :root {
+        --primary-color: #ffffff;
+        --secondary-color: #bbbbbb;
+        --background-color: rgba(18, 18, 18, 0.8);
+        --overlay-color: rgba(0, 0, 0, 0.7);
+      }
+
+      body,
+      html {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        font-family: "Inter", sans-serif;
+      }
+
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: url("https://img.youtube.com/vi/k5xf40KrK3I/maxresdefault.jpg")
+          no-repeat center center fixed;
+        background-size: cover;
+        color: var(--primary-color);
+      }
+
+      .overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: var(--overlay-color);
+        backdrop-filter: blur(10px);
+        z-index: 0;
+      }
+
+      .container {
+        position: relative;
+        z-index: 1;
+        text-align: center;
+        padding: 2rem;
+        background-color: var(--background-color);
+        border-radius: 20px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        max-width: 90%;
+        width: 600px;
+      }
+
+      h1 {
+        font-size: clamp(1.5rem, 4vw, 2.5rem);
+        margin-bottom: 20px;
+        line-height: 1.2;
+      }
+
+      h1 a {
+        color: var(--primary-color);
+        text-decoration: none;
+        transition: text-decoration 0.3s ease;
+      }
+
+      h1 a:hover,
+      h1 a:focus {
+        text-decoration: underline;
+      }
+
+      .countdown {
+        display: flex;
+        justify-content: center;
+        gap: 2rem;
+        flex-wrap: wrap;
+      }
+
+      .countdown-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .countdown-value {
+        font-size: clamp(2rem, 5vw, 3rem);
+        font-weight: 700;
+        line-height: 1;
+      }
+
+      .countdown-label {
+        font-size: clamp(0.7rem, 2vw, 0.8rem);
+        text-transform: uppercase;
+        color: var(--secondary-color);
+        margin-top: 0.5rem;
+      }
+
+      .odometer {
+        font-size: clamp(2rem, 5vw, 3rem);
+      }
+
+      .odometer.odometer-auto-theme.odometer-animating-up
+        .odometer-ribbon-inner,
+      .odometer.odometer-theme-default.odometer-animating-up
+        .odometer-ribbon-inner,
+      .odometer.odometer-auto-theme.odometer-animating-down.odometer-animating
+        .odometer-ribbon-inner,
+      .odometer.odometer-theme-default.odometer-animating-down.odometer-animating
+        .odometer-ribbon-inner {
+        transition: transform 0.9s;
+      }
+
+      @media (max-width: 480px) {
+        .countdown {
+          gap: 1rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="overlay"></div>
+    <main class="container">
+      <h1>
+        <a
+          href="https://www.youtube.com/@DogPack404"
+          target="_blank"
+          rel="noopener noreferrer"
+          >DogPack404 MrBeast Part 2<br />Video Release Countdown</a
+        >
+      </h1>
+      <div class="countdown" id="countdown">
+        <div class="countdown-item">
+          <div id="days" class="odometer countdown-value">0</div>
+          <span class="countdown-label">Days</span>
+        </div>
+        <div class="countdown-item">
+          <div id="hours" class="odometer countdown-value">0</div>
+          <span class="countdown-label">Hours</span>
+        </div>
+        <div class="countdown-item">
+          <div id="minutes" class="odometer countdown-value">0</div>
+          <span class="countdown-label">Minutes</span>
+        </div>
+        <div class="countdown-item">
+          <div id="seconds" class="odometer countdown-value">0</div>
+          <span class="countdown-label">Seconds</span>
+        </div>
+      </div>
+    </main>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/odometer.js/0.4.8/odometer.min.js"></script>
+    <script>
+      const targetDate = new Date("2024-08-08T01:16:14.927Z").getTime();
+
+      document.addEventListener("DOMContentLoaded", function () {
+        const odometerOptions = { auto: false, format: "d", duration: 900 };
+        const daysOdometer = new Odometer({
+          el: document.querySelector("#days"),
+          value: 0,
+          ...odometerOptions,
+        });
+        const hoursOdometer = new Odometer({
+          el: document.querySelector("#hours"),
+          value: 0,
+          ...odometerOptions,
+        });
+        const minutesOdometer = new Odometer({
+          el: document.querySelector("#minutes"),
+          value: 0,
+          ...odometerOptions,
+        });
+        const secondsOdometer = new Odometer({
+          el: document.querySelector("#seconds"),
+          value: 0,
+          ...odometerOptions,
+        });
+
+        function updateOdometers() {
+          const now = new Date().getTime();
+          const distance = targetDate - now;
+
+          if (distance < 0) {
+            document.getElementById("countdown").style.display = "none";
+            return;
+          }
+
+          const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+          const hours = Math.floor(
+            (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+          );
+          const minutes = Math.floor(
+            (distance % (1000 * 60 * 60)) / (1000 * 60)
+          );
+          const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+          daysOdometer.update(days);
+          hoursOdometer.update(hours);
+          minutesOdometer.update(minutes);
+          secondsOdometer.update(seconds);
+        }
+
+        updateOdometers();
+        setInterval(updateOdometers, 1000);
+      });
+    </script>
+  </body>
+</html>
