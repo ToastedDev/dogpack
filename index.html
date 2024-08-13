@@ -131,8 +131,26 @@
           gap: 1rem;
         }
       }
+
+      .change-time-btn {
+        margin-top: 20px;
+        padding: 10px 20px;
+        font-size: 1rem;
+        color: var(--primary-color);
+        background-color: var(--background-color);
+        border: 2px solid var(--highlight-color);
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+
+      .change-time-btn:hover {
+        background-color: var(--highlight-color);
+        color: var(--background-color);
+      }
     </style>
   </head>
+
   <body>
     <img
       id="background-image"
@@ -150,7 +168,7 @@
     />
     <div class="overlay"></div>
     <main class="container">
-      <h1>
+      <h1 id="main-heading">
         <a
           href="https://www.viewstats.com/mrbeast-live-count"
           target="_blank"
@@ -177,11 +195,17 @@
         </div>
       </div>
       <div class="local-time" id="local-time"></div>
+      <button class="change-time-btn" id="change-time-btn">
+        Change Countdown
+      </button>
     </main>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/odometer.js/0.4.8/odometer.min.js"></script>
     <script>
-      const targetDate = new Date("2024-08-09T13:58:42.000Z").getTime();
+      let originalTargetDate = new Date("2024-08-09T13:58:42.000Z").getTime();
+      let targetDate = originalTargetDate;
+      let countdownInterval;
+      let isCustomTime = false;
 
       document.addEventListener("DOMContentLoaded", function () {
         const odometerOptions = { auto: false, format: "d", duration: 900 };
@@ -207,35 +231,36 @@
         });
 
         function updateOdometers() {
-          const now = new Date().getTime();
-          const distance = now - targetDate;
+          try {
+            const now = new Date().getTime();
+            const distance = Math.abs(now - targetDate);
 
-          if (distance < 0) {
-            document.getElementById("countdown").style.display = "none";
-            return;
+            document.getElementById("countdown").style.display = "flex";
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor(
+              (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+            );
+            const minutes = Math.floor(
+              (distance % (1000 * 60 * 60)) / (1000 * 60)
+            );
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            daysOdometer.update(days);
+            hoursOdometer.update(hours);
+            minutesOdometer.update(minutes);
+            secondsOdometer.update(seconds);
+          } catch (error) {
+            console.error("Error updating odometers:", error);
           }
-
-          const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-          const hours = Math.floor(
-            (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
-          );
-          const minutes = Math.floor(
-            (distance % (1000 * 60 * 60)) / (1000 * 60)
-          );
-          const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-          daysOdometer.update(days);
-          hoursOdometer.update(hours);
-          minutesOdometer.update(minutes);
-          secondsOdometer.update(seconds);
         }
 
         function updateLocalTime() {
           const targetDateObj = new Date(targetDate);
           const localTime = targetDateObj.toLocaleString();
-          document.getElementById(
-            "local-time"
-          ).innerText = `Live sub count went down at ${localTime}`;
+          document.getElementById("local-time").innerText = isCustomTime
+            ? `Will be slowest milestone at ${localTime}`
+            : `Live sub count went down at ${localTime}`;
         }
 
         const backgroundImage = document.getElementById("background-image");
@@ -247,10 +272,51 @@
           )})`;
         });
 
+        document
+          .getElementById("change-time-btn")
+          .addEventListener("click", function () {
+            if (isCustomTime) {
+              targetDate = originalTargetDate;
+              this.innerText = "Change Countdown";
+              isCustomTime = false;
+              document.getElementById("main-heading").innerHTML = `
+                <a href="https://www.viewstats.com/mrbeast-live-count" target="_blank" rel="noopener noreferrer">
+                  Time Since MrBeast Live Sub Count Went Down
+                </a>`;
+            } else {
+              const newTargetBaseDate = new Date(
+                "2024-08-07T18:17:18.138Z"
+              ).getTime();
+              targetDate =
+                newTargetBaseDate +
+                5 * 24 * 60 * 60 * 1000 +
+                20 * 60 * 60 * 1000 +
+                3 * 60 * 1000 +
+                43 * 1000;
+              this.innerText = "Change Countdown";
+              isCustomTime = true;
+              document.getElementById("main-heading").innerHTML = `
+                <a href="https://www.viewstats.com/mrbeast-live-count" target="_blank" rel="noopener noreferrer">
+                  Time Until Current Milestone Slower Than 139-140M
+                </a>`;
+            }
+
+            clearInterval(countdownInterval);
+
+            console.log("New target date:", new Date(targetDate));
+            console.log("Current time:", new Date());
+
+            updateOdometers();
+            updateLocalTime();
+
+            countdownInterval = setInterval(updateOdometers, 1000);
+
+            document.getElementById("countdown").style.display = "flex";
+          });
+
         updateOdometers();
         updateLocalTime();
-        setInterval(updateOdometers, 1000);
-        setInterval(updateLocalTime);
+        countdownInterval = setInterval(updateOdometers, 1000);
       });
     </script>
   </body>
