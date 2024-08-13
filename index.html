@@ -3,11 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>DogPack404 MrBeast Part 2 Countdown</title>
+    <title>Time Since MrBeast Live Sub Count Went Down</title>
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/odometer.js/0.4.8/themes/odometer-theme-default.min.css"
     />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/color-thief/2.3.0/color-thief.umd.js"></script>
     <style>
       @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap");
 
@@ -31,8 +32,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        background: url("https://img.youtube.com/vi/NHFvR0ArXPs/maxresdefault.jpg")
-          no-repeat center center fixed;
+        background-color: var(--background-color);
         background-size: cover;
         color: var(--primary-color);
       }
@@ -134,14 +134,28 @@
     </style>
   </head>
   <body>
+    <img
+      id="background-image"
+      src="https://api.communitrics.com/youtube/profile?channel=@Viewstats"
+      style="
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 0;
+        max-width: 100%;
+        max-height: 100vh;
+      "
+      crossorigin="anonymous"
+    />
     <div class="overlay"></div>
     <main class="container">
       <h1>
         <a
-          href="https://www.youtube.com/watch?v=NHFvR0ArXPs"
+          href="https://www.viewstats.com/mrbeast-live-count"
           target="_blank"
           rel="noopener noreferrer"
-          >DogPack404 Part 2<br />Video Release Countdown</a
+          >Time Since MrBeast Live Sub Count Went Down</a
         >
       </h1>
       <div class="countdown" id="countdown">
@@ -167,7 +181,7 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/odometer.js/0.4.8/odometer.min.js"></script>
     <script>
-      const targetDate = new Date("2024-08-08T01:16:14.927Z").getTime();
+      const targetDate = new Date("2024-08-09T13:58:42.000Z").getTime();
 
       document.addEventListener("DOMContentLoaded", function () {
         const odometerOptions = { auto: false, format: "d", duration: 900 };
@@ -194,7 +208,7 @@
 
         function updateOdometers() {
           const now = new Date().getTime();
-          const distance = targetDate - now;
+          const distance = now - targetDate;
 
           if (distance < 0) {
             document.getElementById("countdown").style.display = "none";
@@ -218,12 +232,20 @@
 
         function updateLocalTime() {
           const targetDateObj = new Date(targetDate);
-          targetDateObj.setSeconds(0);
           const localTime = targetDateObj.toLocaleString();
           document.getElementById(
             "local-time"
-          ).innerText = `Video release at ${localTime}`;
+          ).innerText = `Live sub count went down at ${localTime}`;
         }
+
+        const backgroundImage = document.getElementById("background-image");
+        backgroundImage.addEventListener("load", function () {
+          const colorThief = new ColorThief();
+          const dominantColor = colorThief.getColor(backgroundImage);
+          document.body.style.backgroundColor = `rgb(${dominantColor.join(
+            ","
+          )})`;
+        });
 
         updateOdometers();
         updateLocalTime();
