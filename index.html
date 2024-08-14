@@ -148,6 +148,57 @@
         background-color: var(--highlight-color);
         color: var(--background-color);
       }
+
+      .average-subs-container {
+        margin-top: 1.5rem;
+        padding: 1rem;
+        background: linear-gradient(
+          135deg,
+          rgba(255, 255, 255, 0.15),
+          rgba(255, 255, 255, 0.05)
+        );
+        border-radius: 12px;
+        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+      }
+
+      .average-subs-heading {
+        font-size: 1.2rem !important;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        color: var(--highlight-color);
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      }
+
+      .average-subs .odometer-inside {
+        font-size: 1.9rem !important;
+        font-family: "Poppins", sans-serif !important;
+        font-weight: 400 !important;
+        color: var(--highlight-color) !important;
+        text-shadow: 0 1.5px 3px rgba(0, 0, 0, 0.2) !important;
+      }
+
+      .time-since-container {
+        margin-top: 1rem;
+        padding: 0.8rem;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+      }
+
+      .time-since-heading {
+        font-size: clamp(1rem, 2vw, 1.2rem);
+        font-weight: 700;
+        margin-bottom: 0.3rem;
+        color: var(--highlight-color);
+        text-shadow: 0 1.5px 3px rgba(0, 0, 0, 0.2);
+      }
+
+      .time-since {
+        font-size: clamp(1rem, 2vw, 1.2rem);
+        font-weight: 400;
+        color: var(--highlight-color);
+        text-shadow: 0 1.5px 3px rgba(0, 0, 0, 0.2);
+      }
     </style>
   </head>
 
@@ -195,6 +246,21 @@
         </div>
       </div>
       <div class="local-time" id="local-time"></div>
+
+      <div class="average-subs-container">
+        <div class="average-subs-heading">
+          Average Subs Per Day for Current Milestone
+        </div>
+        <div class="average-subs" id="average-subs">
+          <div id="average-odometer" class="odometer">0</div>
+        </div>
+      </div>
+
+      <div class="time-since-container">
+        <div class="time-since-heading">Time Since Hitting 309M</div>
+        <div class="time-since" id="time-since">0 hours 0 minutes</div>
+      </div>
+
       <button class="change-time-btn" id="change-time-btn">
         Change Countdown
       </button>
@@ -229,6 +295,12 @@
           value: 0,
           ...odometerOptions,
         });
+        const averageOdometer = new Odometer({
+          el: document.querySelector("#average-odometer"),
+          value: 0,
+          format: "(,ddd).dd",
+          duration: 1000,
+        });
 
         function updateOdometers() {
           try {
@@ -261,6 +333,44 @@
           document.getElementById("local-time").innerText = isCustomTime
             ? `Will be slowest milestone at ${localTime}`
             : `Live sub count went down at ${localTime}`;
+        }
+
+        function calculateAverageSubsPerDay() {
+          const currentSubscribers = 310_000_000;
+          const initialSubscribers = 309_000_000;
+          const timeElapsed =
+            new Date().getTime() -
+            new Date("2024-08-07T18:17:18.138Z").getTime();
+          const daysElapsed = timeElapsed / (1000 * 60 * 60 * 24);
+
+          if (daysElapsed > 0) {
+            const averageSubsPerDay = (
+              (currentSubscribers - initialSubscribers) /
+              daysElapsed
+            ).toFixed(0);
+            averageOdometer.update(
+              parseFloat(averageSubsPerDay).toLocaleString()
+            );
+          } else {
+            averageOdometer.update(0);
+          }
+        }
+
+        function updateTimeSince309M() {
+          const timeSince309M =
+            new Date().getTime() -
+            new Date("2024-08-07T18:17:18.138Z").getTime();
+          const hoursSince309M = Math.floor(timeSince309M / (1000 * 60 * 60));
+          const minutesSince309M = Math.floor(
+            (timeSince309M % (1000 * 60 * 60)) / (1000 * 60)
+          );
+          const secondsSince309M = Math.floor(
+            (timeSince309M % (1000 * 60)) / 1000
+          );
+
+          document.getElementById(
+            "time-since"
+          ).innerText = `${hoursSince309M} hours, ${minutesSince309M} minutes, ${secondsSince309M} seconds`;
         }
 
         const backgroundImage = document.getElementById("background-image");
@@ -308,15 +418,27 @@
 
             updateOdometers();
             updateLocalTime();
+            calculateAverageSubsPerDay();
+            updateTimeSince309M();
 
-            countdownInterval = setInterval(updateOdometers, 1000);
+            countdownInterval = setInterval(() => {
+              updateOdometers();
+              calculateAverageSubsPerDay();
+              updateTimeSince309M();
+            }, 1000);
 
             document.getElementById("countdown").style.display = "flex";
           });
 
         updateOdometers();
         updateLocalTime();
-        countdownInterval = setInterval(updateOdometers, 1000);
+        calculateAverageSubsPerDay();
+        updateTimeSince309M();
+        countdownInterval = setInterval(() => {
+          updateOdometers();
+          calculateAverageSubsPerDay();
+          updateTimeSince309M();
+        }, 1000);
       });
     </script>
   </body>
