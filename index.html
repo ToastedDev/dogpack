@@ -256,7 +256,7 @@
       </div>
 
       <div class="time-since-container">
-        <div class="time-since-heading">Time Since Hitting 310M</div>
+        <div class="time-since-heading">Time Since Hitting 311M</div>
         <div class="time-since" id="time-since">0 hours 0 minutes</div>
       </div>
 
@@ -339,7 +339,7 @@
           const initialSubscribers = 309_000_000;
           const timeElapsed =
             new Date().getTime() -
-            new Date("2024-08-16T04:39:14.225Z").getTime();
+            new Date("2024-08-20T13:25:22.380Z").getTime();
           const daysElapsed = timeElapsed / (1000 * 60 * 60 * 24);
 
           if (daysElapsed > 0) {
@@ -355,21 +355,21 @@
           }
         }
 
-        function updateTimeSince310M() {
-          const timeSince310M =
+        function updateTimeSince311M() {
+          const timeSince311M =
             new Date().getTime() -
-            new Date("2024-08-16T04:39:14.225Z").getTime();
-          const hoursSince310M = Math.floor(timeSince310M / (1000 * 60 * 60));
-          const minutesSince310M = Math.floor(
-            (timeSince310M % (1000 * 60 * 60)) / (1000 * 60)
+            new Date("2024-08-20T13:25:22.380Z").getTime();
+          const hoursSince311M = Math.floor(timeSince311M / (1000 * 60 * 60));
+          const minutesSince311M = Math.floor(
+            (timeSince311M % (1000 * 60 * 60)) / (1000 * 60)
           );
-          const secondsSince310M = Math.floor(
-            (timeSince310M % (1000 * 60)) / 1000
+          const secondsSince311M = Math.floor(
+            (timeSince311M % (1000 * 60)) / 1000
           );
 
           document.getElementById(
             "time-since"
-          ).innerText = `${hoursSince310M} hours, ${minutesSince310M} minutes, ${secondsSince310M} seconds`;
+          ).innerText = `${hoursSince311M} hours, ${minutesSince311M} minutes, ${secondsSince311M} seconds`;
         }
 
         const backgroundImage = document.getElementById("background-image");
@@ -394,7 +394,7 @@
                 </a>`;
             } else {
               const newTargetBaseDate = new Date(
-                "2024-08-16T04:39:14.225Z"
+                "2024-08-20T13:25:22.380Z"
               ).getTime();
               targetDate =
                 newTargetBaseDate +
@@ -418,12 +418,12 @@
             updateOdometers();
             updateLocalTime();
             calculateAverageSubsPerDay();
-            updateTimeSince310M();
+            updateTimeSince311M();
 
             countdownInterval = setInterval(() => {
               updateOdometers();
               calculateAverageSubsPerDay();
-              updateTimeSince310M();
+              updateTimeSince311M();
             }, 1000);
 
             document.getElementById("countdown").style.display = "flex";
@@ -432,11 +432,11 @@
         updateOdometers();
         updateLocalTime();
         calculateAverageSubsPerDay();
-        updateTimeSince310M();
+        updateTimeSince311M();
         countdownInterval = setInterval(() => {
           updateOdometers();
           calculateAverageSubsPerDay();
-          updateTimeSince310M();
+          updateTimeSince311M();
         }, 1000);
       });
     </script>
