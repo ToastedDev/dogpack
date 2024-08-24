@@ -259,7 +259,7 @@
       </div>
 
       <div class="time-since-container">
-        <div class="time-since-heading">Time Since Hitting 312m</div>
+        <div class="time-since-heading">Time Since Hitting 312M</div>
         <div class="time-since" id="time-since">0 hours 0 minutes</div>
       </div>
 
@@ -358,21 +358,21 @@
           }
         }
 
-        function updateTimeSince312m() {
-          const timeSince312m =
+        function updateTimeSince312M() {
+          const timeSince312M =
             new Date().getTime() -
             new Date("2024-08-24T20:10:36.949Z").getTime();
-          const hoursSince312m = Math.floor(timeSince312m / (1000 * 60 * 60));
-          const minutesSince312m = Math.floor(
-            (timeSince312m % (1000 * 60 * 60)) / (1000 * 60)
+          const hoursSince312M = Math.floor(timeSince312M / (1000 * 60 * 60));
+          const minutesSince312M = Math.floor(
+            (timeSince312M % (1000 * 60 * 60)) / (1000 * 60)
           );
-          const secondsSince312m = Math.floor(
-            (timeSince312m % (1000 * 60)) / 1000
+          const secondsSince312M = Math.floor(
+            (timeSince312M % (1000 * 60)) / 1000
           );
 
           document.getElementById(
             "time-since"
-          ).innerText = `${hoursSince312m} hours, ${minutesSince312m} minutes, ${secondsSince312m} seconds`;
+          ).innerText = `${hoursSince312M} hours, ${minutesSince312M} minutes, ${secondsSince312M} seconds`;
         }
 
         const backgroundImage = document.getElementById("background-image");
@@ -421,12 +421,12 @@
             updateOdometers();
             updateLocalTime();
             calculateAverageSubsPerDay();
-            updateTimeSince312m();
+            updateTimeSince312M();
 
             countdownInterval = setInterval(() => {
               updateOdometers();
               calculateAverageSubsPerDay();
-              updateTimeSince312m();
+              updateTimeSince312M();
             }, 1000);
 
             document.getElementById("countdown").style.display = "flex";
@@ -435,11 +435,11 @@
         updateOdometers();
         updateLocalTime();
         calculateAverageSubsPerDay();
-        updateTimeSince312m();
+        updateTimeSince312M();
         countdownInterval = setInterval(() => {
           updateOdometers();
           calculateAverageSubsPerDay();
-          updateTimeSince312m();
+          updateTimeSince312M();
         }, 1000);
       });
     </script>
